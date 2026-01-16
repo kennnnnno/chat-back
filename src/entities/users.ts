@@ -11,6 +11,8 @@ export class User {
   @PrimaryGeneratedColumn()
   readonly id: number;
   @Column('varchar')
+  readonly user_id: string;
+  @Column('varchar')
   name: string;
   @Column('varchar')
   hash: string;
