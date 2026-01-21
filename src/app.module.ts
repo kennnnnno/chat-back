@@ -7,6 +7,9 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/users';
 import { Auth } from './entities/auth';
+import { ChatRoom } from './entities/chatrooms';
+import { Message } from './entities/Messages';
+import { RoomMember } from './entities/roommembers';
 
 @Module({
   imports: [
@@ -19,7 +22,7 @@ import { Auth } from './entities/auth';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Auth],
+      entities: [User, Auth, ChatRoom, Message, RoomMember],
       synchronize: false,
     }),
     UsersModule,
