@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Auth } from 'src/entities/auth';
 import { User } from 'src/entities/users';
@@ -16,12 +20,16 @@ export class UsersService {
   ) {}
 
   async SignUp(id: string, password: string) {
+    //パスワードが入力されていない場合
+    if (!password) {
+      throw new BadRequestException();
+    }
     const existingUser = await this.userRepository.findOne({
       where: { user_id: id },
     });
     //すでに同じIDのユーザーが存在した場合
     if (existingUser) {
-      throw new BadRequestException('この名前は既に使用されています');
+      throw new ConflictException('このIDは既に使用されています');
     }
     //パスワードをハッシュ化
     const hashedPassword = await bcrypt.hash(password, 10);
