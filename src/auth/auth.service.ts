@@ -72,4 +72,21 @@ export class AuthService {
     }
     return ret;
   }
+
+  async verifyToken(token: string) {
+    const auth = await this.authRepository.findOne({
+      where: {
+        token: Equal(token),
+      },
+    });
+    if (!auth) {
+      throw new UnauthorizedException('無効なトークンです。');
+    }
+    const now = new Date();
+    if (new Date(auth.expire_at) < now) {
+      await this.authRepository.remove(auth);
+      throw new UnauthorizedException('トークンの有効期限が切れています。');
+    }
+    return auth.user_id;
+  }
 }
